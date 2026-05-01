@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    kotlin("jvm") version "2.1.10"
-    kotlin("plugin.lombok") version "2.1.10"
-    kotlin("plugin.compose") version "2.1.10"
-    id("org.jetbrains.intellij.platform") version "2.13.1"
+    kotlin("jvm") version "2.3.21"
+    kotlin("plugin.lombok") version "2.3.21"
+    kotlin("plugin.compose") version "2.3.21"
+    id("org.jetbrains.intellij.platform") version "2.15.0"
     jacoco
 }
 
@@ -18,6 +18,7 @@ repositories {
     mavenCentral()
     intellijPlatform {
         defaultRepositories()
+        jetbrainsRuntime()
     }
     google()
 }
@@ -34,12 +35,8 @@ val binaryIncompatibleRuntimeJarPatterns = listOf(
     "kotlinx-coroutines-core-jvm-*.jar"
 )
 val packagedPluginDirName = "DevoxxGenie"
-val pluginVerifierCommunityIdeVersions = listOf(
-    "2025.1.7",   // 251 line
-    "2025.2.6.1"  // 252 line
-)
 val pluginVerifierUnifiedIdeVersions = listOf(
-    "2025.3.3"    // 253 line
+    "2026.1"       // 261 line
 )
 
 fun Project.stripBinaryIncompatibleRuntimeJars(sandboxPluginPath: String) {
@@ -209,8 +206,8 @@ tasks.named("processResources") {
 
 dependencies {
     intellijPlatform {
-        // Allow overriding IDE version via property: ./gradlew runIde -PideVersion=2025.1.7
-        create("IC", providers.gradleProperty("ideVersion").orElse("2025.1.7")) {}
+        // Allow overriding IDE version via property: ./gradlew runIde -PideVersion=2026.1.1
+        intellijIdea(providers.gradleProperty("ideVersion").orElse("2026.1"))
         bundledPlugin("com.intellij.java")
         bundledPlugin("org.intellij.plugins.markdown")  // Required by markdown renderer
         composeUI()
@@ -362,7 +359,7 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "251"
+            sinceBuild = "261"
             untilBuild = "261.*"
         }
     }
@@ -379,9 +376,6 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            pluginVerifierCommunityIdeVersions.forEach { ideVersion ->
-                create("IC", ideVersion) {}
-            }
             pluginVerifierUnifiedIdeVersions.forEach { ideVersion ->
                 create("IU", ideVersion) {}
             }
@@ -409,10 +403,7 @@ afterEvaluate {
 
 tasks {
     // Run plugin on different IntelliJ versions for testing
-    // Usage: ./gradlew runIde -PideVersion=2024.3.5
-    //        ./gradlew runIde -PideVersion=2025.1.1
-    //        ./gradlew runIde -PideVersion=2025.2.2
-    //        ./gradlew runIde -PideVersion=2025.3.3
+    // Usage: ./gradlew runIde -PideVersion=2026.1
 
     withType<Jar> {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -466,9 +457,8 @@ tasks {
     }
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+kotlin {
+    jvmToolchain(25)
 }
 
 kotlinLombok {
@@ -477,6 +467,6 @@ kotlinLombok {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_25)
     }
 }
