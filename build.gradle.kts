@@ -4,10 +4,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    kotlin("jvm") version "2.1.10"
-    kotlin("plugin.lombok") version "2.1.10"
-    kotlin("plugin.compose") version "2.1.10"
-    id("org.jetbrains.intellij.platform") version "2.13.1"
+    // https://github.com/jetbrains/kotlin/releases
+    kotlin("jvm") version "2.3.21"
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin.plugin.lombok/org.jetbrains.kotlin.plugin.lombok.gradle.plugin
+    kotlin("plugin.lombok") version "2.3.21"
+    // https://github.com/jetbrains/kotlin
+    kotlin("plugin.compose") version "2.3.21"
+    // https://plugins.gradle.org/plugin/org.jetbrains.intellij.platform
+    id("org.jetbrains.intellij.platform") version "2.16.0"
     jacoco
 }
 
@@ -24,6 +28,7 @@ repositories {
 }
 
 jacoco {
+    // https://github.com/jacoco/jacoco/releases
     toolVersion = "0.8.14"
 }
 
@@ -36,8 +41,7 @@ val binaryIncompatibleRuntimeJarPatterns = listOf(
 )
 val packagedPluginDirName = "DevoxxGenie"
 val pluginVerifierUnifiedIdeVersions = listOf(
-    "2025.1",             // 251 line — minimum supported (sinceBuild)
-    "2026.1"              // 261 line
+    "2026.1"              // 261 line — minimum supported (sinceBuild)
     // "2026.2-EAP-SNAPSHOT" // 262 line — not yet available
 )
 
@@ -232,36 +236,59 @@ dependencies {
         // separate Community (IC) Maven artifact is no longer published, so create("IC", ...)
         // can no longer resolve. Use the unified intellijIdea(...) accessor instead.
         // Allow overriding IDE version via property: ./gradlew runIde -PideVersion=2026.1
-        intellijIdea(providers.gradleProperty("ideVersion").orElse("2025.3.3"))
+        intellijIdea(providers.gradleProperty("ideVersion").orElse("2026.1"))
         bundledPlugin("com.intellij.java")
         bundledPlugin("org.intellij.plugins.markdown")  // Required by markdown renderer
         composeUI()
         testFramework(TestFrameworkType.Platform)
     }
-    
-    val lg4j_version = "1.15.0"
-    val lg4j_beta_version = "1.15.0-beta25"
+
+    // https://mvnrepository.com/artifact/dev.langchain4j/langchain4j
+    val lg4j_version = "1.15.1"
+    val lg4j_beta_version = "1.15.1-beta25"
+    // https://mvnrepository.com/artifact/software.amazon.awssdk/bom
     val awsSdkVersion = "2.44.1"
+    // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     val retrofitVersion = "3.0.0"
-    val sqliteVersion = "3.53.0.0"
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    val sqliteVersion = "3.53.1.0"
+    // https://mvnrepository.com/artifact/com.github.docker-java/docker-java
     val dockerJavaVersion = "3.7.1"
+    // https://mvnrepository.com/artifact/com.knuddels/jtokkit
     val jtokkitVersion = "1.1.0"
+    // https://mvnrepository.com/artifact/org.commonmark/commonmark
     val commonmarkVersion = "0.28.0"
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
     val jsoupVersion = "1.22.2"
-    val nettyVersion = "4.2.13.Final"
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    val nettyVersion = "4.2.14.Final"
+    // https://mvnrepository.com/artifact/org.jetbrains.compose.runtime/runtime-desktop
     val composeCompileVersion = "1.7.3"
+    // https://mvnrepository.com/artifact/com.mikepenz/multiplatform-markdown-renderer-jvm
     val markdownRendererVersion = "0.28.0"
+    // https://mvnrepository.com/artifact/org.jetbrains.skiko/skiko-awt
     val skikoVersion = "0.8.18"
-    val logbackVersion = "1.5.32"
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    val logbackVersion = "1.5.33"
+    // https://mvnrepository.com/artifact/nl.basjes.gitignore/gitignore-reader
     val gitignoreReaderVersion = "1.14.1"
-    val junitJupiterVersion = "6.1.0-RC1"
-    val junitPlatformVersion = "6.0.3"
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    val junitJupiterVersion = "6.1.0"
+    // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+    val junitPlatformVersion = "6.1.0"
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
     val lombokVersion = "1.18.46"
+    // https://mvnrepository.com/artifact/org.mockito/mockito-core
     val mockitoVersion = "5.23.0"
+    // https://mvnrepository.com/artifact/org.mockito/mockito-inline
     val mockitoInlineVersion = "5.2.0"
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core
     val assertjVersion = "3.27.7"
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/mockwebserver
     val mockwebserverVersion = "5.3.2"
-    val dotenvVersion = "5.2.2"
+    // https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java
+    val dotenvVersion = "3.2.0"
+    // https://mvnrepository.com/artifact/org.opentest4j/opentest4j
     val opentest4jVersion = "1.3.0"
 
     // Langchain4J dependencies
@@ -380,7 +407,7 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoVersion")
     testImplementation("org.assertj:assertj-core:$assertjVersion")
     testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion")
-    testImplementation("io.github.cdimascio:java-dotenv:$dotenvVersion")
+    testImplementation("io.github.cdimascio:dotenv-java:$dotenvVersion")
     testImplementation("org.opentest4j:opentest4j:$opentest4jVersion")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -390,7 +417,7 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "251"
+            sinceBuild = "261"
             untilBuild = "262.*"
         }
     }
@@ -489,9 +516,8 @@ tasks {
     }
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+kotlin {
+    jvmToolchain(25)
 }
 
 kotlinLombok {
@@ -500,6 +526,6 @@ kotlinLombok {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_25)
     }
 }

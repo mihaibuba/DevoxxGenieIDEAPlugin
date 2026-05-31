@@ -378,17 +378,11 @@ You'll find it in the build/distributions/ directory
 You can test the plugin on multiple IntelliJ IDEA versions to ensure compatibility:
 
 ```shell
-# Test on IntelliJ 2024.3 (default baseline)
+# Test on IntelliJ 2026.1 (default baseline)
 ./gradlew runIde
 
-# Test on IntelliJ 2025.1
-./gradlew runIde -PideVersion=2025.1.1
-
-# Test on IntelliJ 2025.2
-./gradlew runIde -PideVersion=2025.2.2
-
-# Test on IntelliJ 2025.3 (latest stable)
-./gradlew runIde -PideVersion=2025.3.3
+# Test on IntelliJ 2026.2
+./gradlew runIde -PideVersion=2026.2
 ```
 
 > **Note**: First run on a new version will download the IDE (~500MB-1GB), which may take several minutes.
